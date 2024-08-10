@@ -5,12 +5,17 @@
 @endsection
 
 @section('content')
+    @if (session('err'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('err') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
     <section class="slider-area">
         <div class="hero-slider-active slick-arrow-style slick-arrow-style_hero slick-dot-style">
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img"
-                    data-bg="{{ asset('assets/clients/img/slider/home1-slide2.jpg') }}">
+                <div class="hero-slider-item bg-img" data-bg="{{ asset('assets/clients/img/slider/home1-slide2.jpg') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
@@ -28,8 +33,7 @@
 
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img"
-                    data-bg="{{ asset('assets/clients/img/slider/home1-slide3.jpg') }}">
+                <div class="hero-slider-item bg-img" data-bg="{{ asset('assets/clients/img/slider/home1-slide3.jpg') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
@@ -47,8 +51,7 @@
 
             <!-- single slider item start -->
             <div class="hero-single-slide hero-overlay">
-                <div class="hero-slider-item bg-img"
-                    data-bg="{{ asset('assets/clients/img/slider/home1-slide1.jpg') }}">
+                <div class="hero-slider-item bg-img" data-bg="{{ asset('assets/clients/img/slider/home1-slide1.jpg') }}">
                     <div class="container">
                         <div class="row">
                             <div class="col-md-12">
@@ -143,8 +146,7 @@
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
                         <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img1-top.jpg') }}"
-                                alt="product banner">
+                            <img src="{{ asset('assets/clients/img/banner/img1-top.jpg') }}" alt="product banner">
                         </a>
                         <div class="banner-content text-right">
                             <h5 class="banner-text1">BEAUTIFUL</h5>
@@ -156,8 +158,7 @@
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
                         <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img2-top.jpg') }}"
-                                alt="product banner">
+                            <img src="{{ asset('assets/clients/img/banner/img2-top.jpg') }}" alt="product banner">
                         </a>
                         <div class="banner-content text-center">
                             <h5 class="banner-text1">EARRINGS</h5>
@@ -169,8 +170,7 @@
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
                         <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img3-top.jpg') }}"
-                                alt="product banner">
+                            <img src="{{ asset('assets/clients/img/banner/img3-top.jpg') }}" alt="product banner">
                         </a>
                         <div class="banner-content text-center">
                             <h5 class="banner-text1">NEW ARRIVALLS</h5>
@@ -182,8 +182,7 @@
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
                         <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img4-top.jpg') }}"
-                                alt="product banner">
+                            <img src="{{ asset('assets/clients/img/banner/img4-top.jpg') }}" alt="product banner">
                         </a>
                         <div class="banner-content text-right">
                             <h5 class="banner-text1">NEW DESIGN</h5>
@@ -219,43 +218,44 @@
                             <div class="tab-pane fade show active" id="tab1">
                                 <div class="product-carousel-4 slick-row-10 slick-arrow-style">
                                     @foreach ($sanPham as $item)
-                                         <!-- product item start -->
-                                    <div class="product-item">
-                                        <figure class="product-thumb">
-                                            <a href="{{route('products.detail', $item->id)}}">
-                                                <img class="pri-img"
-                                                    src="{{Storage::url($item->hinh_anh)}}"
-                                                    alt="product">
-                                                <img class="sec-img"
-                                                    src="{{Storage::url($item->hinh_anh)}}"
-                                                    alt="product">
-                                            </a>
-                                            <form action="{{route('cart.add')}}" method="post">
-                                                @csrf
-                                                <input type="hidden" name="quantity" value="1">
-                                                <input type="hidden" name="product_id" value="{{ $item->id }}">
-                                                <div class="cart-hover">
-                                                    @if ($item->so_luong > 0)
-                                                    <button class="btn btn-cart">add to cart</button>
-                                                @else
-                                                    <button class="btn btn-cart" disabled>add to cart</button>
-                                                @endif
+                                        <!-- product item start -->
+                                        <div class="product-item">
+                                            <figure class="product-thumb">
+                                                <a href="{{ route('products.detail', $item->id) }}">
+                                                    <img class="pri-img" src="{{ Storage::url($item->hinh_anh) }}"
+                                                        alt="product">
+                                                    <img class="sec-img" src="{{ Storage::url($item->hinh_anh) }}"
+                                                        alt="product">
+                                                </a>
+                                                <form action="{{ route('cart.add') }}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="quantity" value="1">
+                                                    <input type="hidden" name="product_id" value="{{ $item->id }}">
+                                                    <div class="cart-hover">
+                                                        @if ($item->so_luong > 0)
+                                                            <button class="btn btn-cart">add to cart</button>
+                                                        @else
+                                                            <button class="btn btn-cart" disabled>add to cart</button>
+                                                        @endif
+                                                    </div>
+                                                </form>
+                                            </figure>
+                                            <div class="product-caption text-center">
+                                                <h6 class="product-name">
+                                                    <a
+                                                        href="{{ route('products.detail', $item->id) }}">{{ $item->ten_san_pham }}</a>
+                                                </h6>
+                                                <div class="price-box">
+                                                    <span
+                                                        class="price-regular">{{ $item->gia_khuyen_mai == 0 ? number_format($item->gia_san_pham, 0, '', '.') : number_format($item->gia_khuyen_mai, 0, '', '.') }}Đ</span>
+                                                    <span
+                                                        class="price-old"><del>{{ $item->gia_khuyen_mai == 0 ? '' : number_format($item->gia_san_pham, 0, '', '.') }}</del></span>
                                                 </div>
-                                               </form>
-                                        </figure>
-                                        <div class="product-caption text-center">
-                                            <h6 class="product-name">
-                                                <a href="{{route('products.detail', $item->id)}}">{{$item->ten_san_pham}}</a>
-                                            </h6>
-                                            <div class="price-box">
-                                                <span class="price-regular">{{$item->gia_khuyen_mai == 0 ? number_format($item->gia_san_pham, 0, '', '.') : number_format($item->gia_khuyen_mai, 0, '', '.')}}Đ</span>
-                                                <span class="price-old"><del>{{$item->gia_khuyen_mai == 0 ? '' : number_format($item->gia_san_pham, 0, '', '.')}}</del></span>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- product item end -->
+                                        <!-- product item end -->
                                     @endforeach
-                                   
+
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="tab2">
@@ -280,12 +280,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -297,13 +295,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Gold</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -346,12 +342,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -363,13 +357,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -409,12 +401,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -426,13 +416,12 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Diamond</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Diamond</a>
+                                                </p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -475,12 +464,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -492,13 +479,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">silver</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">silver</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -541,12 +526,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -558,13 +541,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -610,12 +591,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -627,13 +606,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Gold</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -676,12 +653,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -693,13 +668,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -739,12 +712,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -756,13 +727,12 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Diamond</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Diamond</a>
+                                                </p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -805,12 +775,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -822,13 +790,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">silver</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">silver</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -871,12 +837,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -888,13 +852,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -940,12 +902,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -957,13 +917,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Gold</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Gold</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -1006,12 +964,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -1023,13 +979,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -1069,12 +1023,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -1086,13 +1038,12 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">Diamond</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">Diamond</a>
+                                                </p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -1135,12 +1086,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -1152,13 +1101,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">silver</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">silver</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -1201,12 +1148,10 @@
                                                 </div>
                                             </div>
                                             <div class="button-group">
-                                                <a href="wishlist.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to wishlist"><i
-                                                        class="pe-7s-like"></i></a>
-                                                <a href="compare.html" data-bs-toggle="tooltip"
-                                                    data-bs-placement="left" title="Add to Compare"><i
-                                                        class="pe-7s-refresh-2"></i></a>
+                                                <a href="wishlist.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to wishlist"><i class="pe-7s-like"></i></a>
+                                                <a href="compare.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                                    title="Add to Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 <a href="#" data-bs-toggle="modal"
                                                     data-bs-target="#quick_view"><span data-bs-toggle="tooltip"
                                                         data-bs-placement="left" title="Quick View"><i
@@ -1218,13 +1163,11 @@
                                         </figure>
                                         <div class="product-caption text-center">
                                             <div class="product-identity">
-                                                <p class="manufacturer-name"><a
-                                                        href="product-details.html">mony</a></p>
+                                                <p class="manufacturer-name"><a href="product-details.html">mony</a></p>
                                             </div>
                                             <ul class="color-categories">
                                                 <li>
-                                                    <a class="c-lightblue" href="#"
-                                                        title="LightSteelblue"></a>
+                                                    <a class="c-lightblue" href="#" title="LightSteelblue"></a>
                                                 </li>
                                                 <li>
                                                     <a class="c-darktan" href="#" title="Darktan"></a>
@@ -1689,8 +1632,7 @@
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="{{ asset('assets/clients/img/blog/blog-img1.jpg') }}"
-                                        alt="blog image">
+                                    <img src="{{ asset('assets/clients/img/blog/blog-img1.jpg') }}" alt="blog image">
                                 </a>
                             </figure>
                             <div class="blog-content">
@@ -1709,8 +1651,7 @@
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="{{ asset('assets/clients/img/blog/blog-img2.jpg') }}"
-                                        alt="blog image">
+                                    <img src="{{ asset('assets/clients/img/blog/blog-img2.jpg') }}" alt="blog image">
                                 </a>
                             </figure>
                             <div class="blog-content">
@@ -1729,8 +1670,7 @@
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="{{ asset('assets/clients/img/blog/blog-img3.jpg') }}"
-                                        alt="blog image">
+                                    <img src="{{ asset('assets/clients/img/blog/blog-img3.jpg') }}" alt="blog image">
                                 </a>
                             </figure>
                             <div class="blog-content">
@@ -1749,8 +1689,7 @@
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="{{ asset('assets/clients/img/blog/blog-img4.jpg') }}"
-                                        alt="blog image">
+                                    <img src="{{ asset('assets/clients/img/blog/blog-img4.jpg') }}" alt="blog image">
                                 </a>
                             </figure>
                             <div class="blog-content">
@@ -1769,8 +1708,7 @@
                         <div class="blog-post-item">
                             <figure class="blog-thumb">
                                 <a href="blog-details.html">
-                                    <img src="{{ asset('assets/clients/img/blog/blog-img5.jpg') }}"
-                                        alt="blog image">
+                                    <img src="{{ asset('assets/clients/img/blog/blog-img5.jpg') }}" alt="blog image">
                                 </a>
                             </figure>
                             <div class="blog-content">
@@ -1800,8 +1738,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/1.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/1.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1809,8 +1746,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/2.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/2.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1818,8 +1754,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/3.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/3.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1827,8 +1762,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/4.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/4.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1836,8 +1770,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/5.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/5.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1845,8 +1778,7 @@
                         <!-- single brand start -->
                         <div class="brand-item">
                             <a href="#">
-                                <img src="{{ asset('assets/clients/img/brand/6.png') }}"
-                                    alt="">
+                                <img src="{{ asset('assets/clients/img/brand/6.png') }}" alt="">
                             </a>
                         </div>
                         <!-- single brand end -->
@@ -1856,5 +1788,4 @@
         </div>
     </div>
     <!-- brand logo area end -->
-    
 @endsection

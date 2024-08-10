@@ -66,6 +66,13 @@
                                         @if ($sanPhamCT->so_luong == 0)
                                             <h2 class="text-danger">Sản phẩm đã hết</h2>
                                         @endif
+                                        @if (session('err'))
+                                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                {{ session('err') }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                        @endif
                                         <a href="#">Mã sản phẩm: {{ $sanPhamCT->ma_san_pham }}</a>
                                     </div>
                                     <h3 class="product-name">{{ $sanPhamCT->ten_san_pham }}</h3>

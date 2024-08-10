@@ -12,7 +12,6 @@ class CartController extends Controller
         $total = 0;
         $subTotal = 0;
         $shipping = 25000;
-
         foreach($cart as $item) {
             $subTotal += $item['gia'] * $item['so_luong'];
         }
@@ -28,12 +27,21 @@ class CartController extends Controller
         $sanPham = SanPham::query()->findOrFail($productId);
         $gia = isset($sanPham->gia_khuyen_mai) ? $sanPham->gia_khuyen_mai : $sanPham->gia_san_pham;
 
-        // Khởi tạo 1 mảng chứa thông tin giỏ hàng trên session
+        $sanPham = SanPham::query()->findOrFail($productId);
+        if ($quantity > $sanPham->so_luong) {
+            return redirect()->back()->with('err', 'Số lượng sản phẩm của chúng tôi không đủ.');
+        }else{
+            // Khởi tạo 1 mảng chứa thông tin giỏ hàng trên session
         $cart = session()->get('cart', []);
 
         if (isset($cart[$productId])) {
             // Sản phẩm đã tồn tại trong giỏ hàng
-            $cart[$productId]['so_luong'] += $quantity;
+            if ( $cart[$productId]['so_luong'] + $quantity > $sanPham->so_luong) {
+                return redirect()->back()->with('err', "Số lượng sản phẩm: $sanPham->ten_san_pham bạn thêm vào giỏ hàng lớn hơn số lượng chúng tôi đang có.");
+            }else{
+                $cart[$productId]['so_luong'] += $quantity;
+            }
+            
         }else {
             // Sản phẩm chưa có trong giỏ hàng
             $cart[$productId]= [
@@ -43,13 +51,23 @@ class CartController extends Controller
                 'hinh_anh' => $sanPham->hinh_anh,
             ];
         }
-        
+        }       
         session()->put('cart', $cart);
         return redirect()->back();
     }
 
     public function updateCart(Request $request) {
         $cartNew = $request->input('cart', []);
+        $sanPham = SanPham::query()->get();
+        foreach ($cartNew as $key => $value) {
+            foreach ($sanPham as $item) {
+                if ($key == $item->id) {
+                    if($item->so_luong < $value['so_luong']){
+                        return redirect()->back()->with('err', "'Mã sản phẩm: ' . $item->ten_san_pham . 'của chúng tội hiện tại không đủ số lượng bạn mong muốn.'");
+                    }
+                }
+            }
+        }
         session()->put('cart', $cartNew);
         return redirect()->back();
     }
