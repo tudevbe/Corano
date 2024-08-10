@@ -190,6 +190,7 @@
                                                     
                                                 
 
+                                                <li><a href="{{route('donhang.index')}}">Đơn hàng của bạn</a></li>
                                                 <li><a href="my-account.html">my account</a></li>
 
                                             </ul>

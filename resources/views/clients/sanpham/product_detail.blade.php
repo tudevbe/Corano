@@ -63,7 +63,10 @@
                             <div class="col-lg-7">
                                 <div class="product-details-des">
                                     <div class="manufacturer-name">
-                                        <a href="product-details.html">Mã sản phẩm: {{ $sanPhamCT->ma_san_pham }}</a>
+                                        @if ($sanPhamCT->so_luong == 0)
+                                            <h2 class="text-danger">Sản phẩm đã hết</h2>
+                                        @endif
+                                        <a href="#">Mã sản phẩm: {{ $sanPhamCT->ma_san_pham }}</a>
                                     </div>
                                     <h3 class="product-name">{{ $sanPhamCT->ten_san_pham }}</h3>
                                     <div class="ratings d-flex">
@@ -78,9 +81,9 @@
                                     </div>
                                     <div class="price-box">
                                         <span
-                                            class="price-regular">{{$sanPhamCT->gia_khuyen_mai == 0 ? number_format($sanPhamCT->gia_san_pham, 0, '', '.') : number_format($sanPhamCT->gia_khuyen_mai, 0, '', '.')}}
+                                            class="price-regular">{{ $sanPhamCT->gia_khuyen_mai == 0 ? number_format($sanPhamCT->gia_san_pham, 0, '', '.') : number_format($sanPhamCT->gia_khuyen_mai, 0, '', '.') }}
                                             đ</span>
-                                        <span class="price-old"><del>{{$sanPhamCT->gia_khuyen_mai == 0 ? '' : number_format($sanPhamCT->gia_san_pham, 0, '', '.')}}
+                                        <span class="price-old"><del>{{ $sanPhamCT->gia_khuyen_mai == 0 ? '' : number_format($sanPhamCT->gia_san_pham, 0, '', '.') }}
                                                 đ</del></span>
                                     </div>
                                     <div class="availability">
@@ -91,16 +94,21 @@
                                         Mô tả ngắn: <br>
                                         {{ $sanPhamCT->mo_ta_ngan }}
                                     </p>
-                                    <form action="{{route('cart.add')}}" method="POST">
+                                    <form action="{{ route('cart.add') }}" method="POST">
                                         @csrf
                                         <div class="quantity-cart-box d-flex align-items-center">
                                             <h6 class="option-title">Số lượng:</h6>
                                             <div class="quantity">
-                                                <div class="pro-qty"><input type="text" value="1" name="quantity" id="quantityInput"></div>
+                                                <div class="pro-qty"><input type="text" value="1" name="quantity"
+                                                        id="quantityInput"></div>
                                                 <input type="hidden" name="product_id" value=" {{ $sanPhamCT->id }}">
                                             </div>
                                             <div class="action_link">
-                                                <button type="submit" class="btn btn-cart2">Add to cart</button>
+                                                @if ($sanPhamCT->so_luong > 0)
+                                                    <button type="submit" class="btn btn-cart">add to cart</button>
+                                                @else
+                                                    <button class="btn btn-cart" disabled>add to cart</button>
+                                                @endif
                                             </div>
                                         </div>
                                     </form>
@@ -240,18 +248,23 @@
                         @foreach ($sanPham as $item)
                             <div class="product-item">
                                 <figure class="product-thumb">
-                                    <a href="product-details.html">
+                                    <a href="{{ route('products.detail', $item->id) }}">
                                         <img class="pri-img" src="{{ Storage::url($item->hinh_anh) }}" alt="product">
                                         <img class="sec-img" src="{{ Storage::url($item->hinh_anh) }}" alt="product">
                                     </a>
-                                   <form action="{{route('cart.add')}}" method="post">
-                                    @csrf
-                                    <input type="hidden" name="quantity" value="1">
-                                    <input type="hidden" name="product_id" value="{{ $item->id }}">
-                                    <div class="cart-hover">
-                                        <button class="btn btn-cart">add to cart</button>
-                                    </div>
-                                   </form>
+                                    <form action="{{ route('cart.add') }}" method="post">
+                                        @csrf
+                                        <input type="hidden" name="quantity" value="1">
+                                        <input type="hidden" name="product_id" value="{{ $item->id }}">
+                                        <div class="cart-hover">
+                                            @if ($item->so_luong > 0)
+                                                <button class="btn btn-cart">add to cart</button>
+                                            @else
+                                                <button class="btn btn-cart" disabled>add to cart</button>
+                                            @endif
+
+                                        </div>
+                                    </form>
                                 </figure>
                                 <div class="product-caption text-center">
                                     <div class="product-identity">
@@ -262,9 +275,10 @@
                                         <a href="product-details.html">{{ $item->ten_san_pham }}/a>
                                     </h6>
                                     <div class="price-box">
-                                        <span class="price-regular">{{$item->gia_khuyen_mai == 0 ? number_format($item->gia_san_pham, 0, '', '.') : number_format($item->gia_khuyen_mai, 0, '', '.')}}
+                                        <span
+                                            class="price-regular">{{ $item->gia_khuyen_mai == 0 ? number_format($item->gia_san_pham, 0, '', '.') : number_format($item->gia_khuyen_mai, 0, '', '.') }}
                                             đ</span>
-                                        <span class="price-old"><del>{{$item->gia_khuyen_mai == 0 ? '' : number_format($item->gia_san_pham, 0, '', '.')}}
+                                        <span class="price-old"><del>{{ $item->gia_khuyen_mai == 0 ? '' : number_format($item->gia_san_pham, 0, '', '.') }}
                                                 đ</del></span>
                                     </div>
                                 </div>
@@ -291,19 +305,19 @@
 
             if ($button.hasClass('inc')) {
                 var newVal = oldValue + 1;
-            }else {
+            } else {
                 if (oldValue > 1) {
-                var newVal = oldValue - 1;  
-                }else {
+                    var newVal = oldValue - 1;
+                } else {
                     var newVal = 1;
                 }
             }
             $input.val(newVal);
-          
+
         });
 
         // xử lí nếu người dùng nhập số âm
-        $('#quantityInput').on('change', function () {
+        $('#quantityInput').on('change', function() {
             var value = parseInt($(this).val(), 10)
 
             if (isNaN(value) || value < 1) {

@@ -16,7 +16,7 @@
                     <div class="breadcrumb-wrap">
                         <nav aria-label="breadcrumb">
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{route('home')}}"><i class="fa fa-home"></i></a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('home') }}"><i class="fa fa-home"></i></a></li>
                                 <li class="breadcrumb-item active" aria-current="page">cart</li>
                             </ul>
                         </nav>
@@ -53,23 +53,28 @@
                                             <tr>
                                                 <td class="pro-thumbnail">
                                                     <a href="#">
-                                                        <img class="img-fluid" src="{{ Storage::url($item['hinh_anh']) }}" alt="Product" />
-                                                        <input type="hidden" name="cart[{{$key}}][hinh_anh]" value="{{$item['hinh_anh']}}">
+                                                        <img class="img-fluid" src="{{ Storage::url($item['hinh_anh']) }}"
+                                                            alt="Product" />
+                                                        <input type="hidden" name="cart[{{ $key }}][hinh_anh]"
+                                                            value="{{ $item['hinh_anh'] }}">
                                                     </a>
                                                 </td>
                                                 <td class="pro-title"><a
                                                         href="{{ route('products.detail', $key) }}">{{ $item['ten_san_pham'] }}
-                                                        <input type="hidden" name="cart[{{$key}}][ten_san_pham]" value="{{$item['ten_san_pham']}}">
+                                                        <input type="hidden" name="cart[{{ $key }}][ten_san_pham]"
+                                                            value="{{ $item['ten_san_pham'] }}">
                                                     </a>
                                                 </td>
                                                 <td class="pro-price">
                                                     <span>{{ number_format($item['gia'], 0, '', '.') }} đ</span>
-                                                    <input type="hidden" name="cart[{{$key}}][gia]" value="{{$item['gia']}}">
+                                                    <input type="hidden" name="cart[{{ $key }}][gia]"
+                                                        value="{{ $item['gia'] }}">
                                                 </td>
                                                 <td class="pro-quantity">
                                                     <div class="pro-qty">
-                                                        <input type="text" value="{{ $item['so_luong'] }}"
-                                                            class="quantityInput" data-price="{{ $item['gia'] }}" name="cart[{{$key}}][so_luong]"/>
+                                                        <input type="text" value="{{ $item['so_luong'] }}" 
+                                                            class="quantityInput" data-price="{{ $item['gia'] }}"
+                                                            name="cart[{{ $key }}][so_luong]"/>
                                                     </div>
                                                 </td>
                                                 <td class="pro-subtotal"><span
@@ -116,7 +121,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <a href="{{route('donhang.create')}}" class="btn btn-sqr d-block">Tiến hành đặt hàng</a>
+                            <a href="{{ route('donhang.create') }}" class="btn btn-sqr d-block">Tiến hành đặt hàng</a>
                         </div>
                     </div>
                 </div>

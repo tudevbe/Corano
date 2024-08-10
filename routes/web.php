@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DanhMucController;
+use App\Http\Controllers\Admin\DonHangController;
 use App\Http\Controllers\Admin\SanPhamController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
@@ -83,4 +84,14 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
                 Route::put('{id}/update', [SanPhamController::class, 'update'])->name('update');
                 Route::delete('{id}/destroy', [SanPhamController::class, 'destroy'])->name('destroy');
             });
+
+            //Route Đơn hàng
+        Route::prefix('donhangs')
+        ->as('donhangs.')
+        ->group(function () {
+            Route::get('/', [DonHangController::class, 'index'])->name('index');
+            Route::get('/show/{id}', [DonHangController::class, 'show'])->name('show');
+            Route::put('{id}/update', [DonHangController::class, 'update'])->name('update');
+            Route::delete('{id}/destroy', [DonHangController::class, 'destroy'])->name('destroy');
+        });
     });

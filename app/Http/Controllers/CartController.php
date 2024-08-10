@@ -9,7 +9,6 @@ class CartController extends Controller
 {
     public function listCart() {
         $cart = session()->get('cart', []);
-
         $total = 0;
         $subTotal = 0;
         $shipping = 25000;
@@ -17,10 +16,10 @@ class CartController extends Controller
         foreach($cart as $item) {
             $subTotal += $item['gia'] * $item['so_luong'];
         }
-
+        
         $total = $subTotal + $shipping;
 
-        return view('clients.giohang', compact('cart','subTotal','total','shipping' ));
+        return view('clients.giohang', compact('cart','subTotal','total','shipping'));
     }
 
     public function addCart(Request $request) {

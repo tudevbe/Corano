@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\OrderRequest;
+use App\Mail\OrderConfirm;
 use App\Models\DonHang;
+use App\Models\SanPham;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\While_;
 
 class OrderController extends Controller
@@ -16,7 +19,13 @@ class OrderController extends Controller
      */
     public function index()
     {
-        //
+        $donHangs = Auth::user()->donHang;
+        $trangThaiDonHang = DonHang::TRANG_THAI_DON_HANG;
+        $typeChoXacNhan = DonHang::CHO_XAC_NHAN;
+        $typeDangVanChuyen = DonHang::DANG_VAN_CHUYEN;
+        $typeDaXacNhan = DonHang::DA_XAC_NHAN;
+        $typeDangChuanBi = DonHang::DANG_CHUAN_BI;
+        return view('clients.donhangs.index', compact('donHangs', 'trangThaiDonHang', 'typeChoXacNhan', 'typeDangVanChuyen', 'typeDaXacNhan', 'typeDangChuanBi'));
     }
 
     /**
@@ -55,7 +64,7 @@ class OrderController extends Controller
                 $donHang = DonHang::query()->create($params);
                 $donHangId = $donHang->id;
 
-                $carts = session()->get('cart', []); 
+                $carts = session()->get('cart', []);
                 
                 foreach ($carts as $key => $item) {
                     $thanhTien = $item['gia'] * $item['so_luong'];
@@ -71,14 +80,20 @@ class OrderController extends Controller
 
                 DB::commit();
 
+
                 // khi thêm thành công sẽ thực hiện các công việc dưới đây
                 // trừ đi số lượng của sản phẩm
+                foreach ($donHang->chiTietDonHang as $value) {
+                    $sanPham = SanPham::query()->findOrFail($value->san_pham_id);
+                    $sanPham->so_luong -= $value->so_luong;
+                    $sanPham->save();
+                }
                 // gửi mail khi đặt hàng thành công
+                Mail::to($donHang->email_nguoi_nhan)->queue(new OrderConfirm($donHang));
+
                 session()->put('cart', []);
 
                 return redirect()->route('donhang.index')->with('suc', 'Đặt hàng thành công.');
-
-                // dd($params);
             } catch (\Exception $e) {
                 DB::rollBack();
                 return redirect()->back()->with('err', 'Có lỗi khi đặt hàng. Kiểm tra lại thông tin đơn hàng.');
@@ -91,23 +106,33 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $donHang = DonHang::query()->findOrFail($id);
+        $trangThaiDonHang = DonHang::TRANG_THAI_DON_HANG;
+        $trangThaiThanhToan = DonHang::TRANG_THAI_THANH_TOAN;
+
+        return view('clients.donhangs.show', compact('donHang', 'trangThaiDonHang', 'trangThaiThanhToan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $donHang = DonHang::query()->findOrFail($id);
+        DB::beginTransaction();
+
+        try {
+            if ($request->has('huy_don_hang')) {
+                $donHang->update(['trang_thai_don_hang' => DonHang::HUY_DON_HANG]);
+            } elseif ($request->has('da_giao_hang')) {
+                $donHang->update(['trang_thai_don_hang' => DonHang::DA_GIAO_HANG]);
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
+        return redirect()->back();
     }
 
     /**

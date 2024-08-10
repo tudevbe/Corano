@@ -235,7 +235,11 @@
                                                 <input type="hidden" name="quantity" value="1">
                                                 <input type="hidden" name="product_id" value="{{ $item->id }}">
                                                 <div class="cart-hover">
+                                                    @if ($item->so_luong > 0)
                                                     <button class="btn btn-cart">add to cart</button>
+                                                @else
+                                                    <button class="btn btn-cart" disabled>add to cart</button>
+                                                @endif
                                                 </div>
                                                </form>
                                         </figure>

@@ -28,7 +28,7 @@
                  </li>
 
                  <li>
-                     <a class='tp-link' href='calendar.html'>
+                     <a class='tp-link' href='#'>
                          <i data-feather="users"></i>
                          <span> Quản lí tài khoản </span>
                      </a>
@@ -47,6 +47,13 @@
                     <a class='tp-link' href='{{ route('admins.sanphams.index') }}'>
                         <i data-feather="package"></i>
                         <span> Sản phẩm </span>
+                    </a>
+                </li>
+
+                <li>
+                    <a class='tp-link' href='{{ route('admins.donhangs.index') }}'>
+                        <i data-feather="shopping-bag"></i>
+                        <span> Đơn hàng </span>
                     </a>
                 </li>
 
