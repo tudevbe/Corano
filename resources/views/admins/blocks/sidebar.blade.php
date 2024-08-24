@@ -39,21 +39,27 @@
                  <li>
                     <a class='tp-link' href='{{ route('admins.danhmucs.index') }}'>
                         <i data-feather="align-center"></i>
-                        <span> Danh mục sản phẩm </span>
+                        <span>Quản lí danh mục sản phẩm </span>
                     </a>
                 </li>
 
                 <li>
                     <a class='tp-link' href='{{ route('admins.sanphams.index') }}'>
                         <i data-feather="package"></i>
-                        <span> Sản phẩm </span>
+                        <span>Quản lí sản phẩm </span>
                     </a>
                 </li>
 
                 <li>
                     <a class='tp-link' href='{{ route('admins.donhangs.index') }}'>
                         <i data-feather="shopping-bag"></i>
-                        <span> Đơn hàng </span>
+                        <span>Quản lí đơn hàng </span>
+                    </a>
+                </li>
+                <li>
+                    <a class='tp-link' href='{{ route('admins.khuyenmais.index') }}'>
+                        <i data-feather="gift"></i>
+                        <span> Quản lí khuyến mãi </span>
                     </a>
                 </li>
 

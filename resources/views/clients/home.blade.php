@@ -143,54 +143,20 @@
     <div class="banner-statistics-area">
         <div class="container">
             <div class="row row-20 mtn-20">
+                @foreach ($danhMuc as $item)
+                    
                 <div class="col-sm-6">
                     <figure class="banner-statistics mt-20">
-                        <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img1-top.jpg') }}" alt="product banner">
+                        <a href="{{route('danh_muc', $item->id)}}">
+                            <img src="{{ Storage::url($item->hinh_anh) }}" alt="product banner">
                         </a>
                         <div class="banner-content text-right">
-                            <h5 class="banner-text1">BEAUTIFUL</h5>
-                            <h2 class="banner-text2">Wedding<span>Rings</span></h2>
-                            <a href="shop.html" class="btn btn-text">Shop Now</a>
+                            <h2 class="banner-text2">{{$item->ten_danh_muc}}</h2>
+                            <a href="{{route('danh_muc', $item->id)}}" class="btn btn-text">Shop Now</a>
                         </div>
                     </figure>
                 </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img2-top.jpg') }}" alt="product banner">
-                        </a>
-                        <div class="banner-content text-center">
-                            <h5 class="banner-text1">EARRINGS</h5>
-                            <h2 class="banner-text2">Tangerine Floral <span>Earring</span></h2>
-                            <a href="shop.html" class="btn btn-text">Shop Now</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img3-top.jpg') }}" alt="product banner">
-                        </a>
-                        <div class="banner-content text-center">
-                            <h5 class="banner-text1">NEW ARRIVALLS</h5>
-                            <h2 class="banner-text2">Pearl<span>Necklaces</span></h2>
-                            <a href="shop.html" class="btn btn-text">Shop Now</a>
-                        </div>
-                    </figure>
-                </div>
-                <div class="col-sm-6">
-                    <figure class="banner-statistics mt-20">
-                        <a href="#">
-                            <img src="{{ asset('assets/clients/img/banner/img4-top.jpg') }}" alt="product banner">
-                        </a>
-                        <div class="banner-content text-right">
-                            <h5 class="banner-text1">NEW DESIGN</h5>
-                            <h2 class="banner-text2">Diamond<span>Jewelry</span></h2>
-                            <a href="shop.html" class="btn btn-text">Shop Now</a>
-                        </div>
-                    </figure>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

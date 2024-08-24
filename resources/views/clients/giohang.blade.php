@@ -100,40 +100,47 @@
                                 <div class="cart-update">
                                     <button type="submit" class="btn btn-sqr">Update Cart</button>
                                 </div>
-                            </div>
                         </form>
+                        {{-- <div class="apply-coupon-wrapper">
+                            <form action="{{ route('cart.list') }}" method="get" class=" d-block d-md-flex">
+                                @csrf
+                                <input type="text" name="coupon" placeholder="Enter Your Coupon Code" value="{{old('coupon')}}" required/>
+                                <button type="submit" class="btn btn-sqr">Apply Coupon</button>
+                            </form>
+                        </div> --}}
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-5 ml-auto">
-                        <!-- Cart Calculation Area -->
-                        <div class="cart-calculator-wrapper">
-                            <div class="cart-calculate-items">
-                                <h6>Cart Totals</h6>
-                                <div class="table-responsive">
-                                    <table class="table">
-                                        <tr>
-                                            <td>Sub Total</td>
-                                            <td class="sub-total">{{ number_format($subTotal, 0, '', '.') }} đ</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Shipping</td>
-                                            <td class="shipping">
-                                                {{ !empty($cart) ? number_format($shipping, 0, '', '.') : '0' }} đ</td>
-                                        </tr>
-                                        <tr class="total">
-                                            <td>Total</td>
-                                            <td class="total-amount">{{ number_format($total, 0, '', '.') }} đ</td>
-                                        </tr>
-                                    </table>
-                                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 ml-auto">
+                    <!-- Cart Calculation Area -->
+                    <div class="cart-calculator-wrapper">
+                        <div class="cart-calculate-items">
+                            <h6>Cart Totals</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <td>Sub Total</td>
+                                        <td class="sub-total">{{ number_format($subTotal, 0, '', '.') }} đ</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping</td>
+                                        <td class="shipping">
+                                            {{ !empty($cart) ? number_format($shipping, 0, '', '.') : '0' }} đ</td>
+                                    </tr>
+                                    <tr class="total">
+                                        <td>Total</td>
+                                        <td class="total-amount">{{ number_format($total, 0, '', '.') }} đ</td>
+                                    </tr>
+                                </table>
                             </div>
-                            <a href="{{ route('donhang.create') }}" class="btn btn-sqr d-block">Tiến hành đặt hàng</a>
                         </div>
+                        <a href="{{ route('donhang.create') }}" class="btn btn-sqr d-block">Tiến hành đặt hàng</a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
     <!-- cart main wrapper end -->
 @endsection
@@ -155,7 +162,7 @@
 
             // Lấy số tiền vận chuyển
             var shipping = parseFloat($('.shipping').text().replace(/\./g, '').replace(' đ', ''));
-            var total = subtotal + shipping;
+            var total = (subtotal + shipping) - coupon;
 
             // cập nhật giá trị
             $('.sub-total').text(subtotal.toLocaleString('vi-VN') + ' đ');

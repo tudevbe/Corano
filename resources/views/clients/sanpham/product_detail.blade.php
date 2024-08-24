@@ -276,7 +276,7 @@
                                 <div class="product-caption text-center">
                                     <div class="product-identity">
                                         <p class="manufacturer-name"><a
-                                                href="#">{{ $item->danhMuc->ten_danh_muc }}</a></p>
+                                                href="{{route('danh_muc',$item->danh_muc_id)}}">{{ $item->danhMuc->ten_danh_muc }}</a></p>
                                     </div>
                                     <h6 class="product-name">
                                         <a href="product-details.html">{{ $item->ten_san_pham }}/a>

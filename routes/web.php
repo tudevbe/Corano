@@ -5,9 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\DanhMucController;
 use App\Http\Controllers\Admin\DonHangController;
+use App\Http\Controllers\Admin\MaKhuyenMaiController;
 use App\Http\Controllers\Admin\SanPhamController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\User\SanPhamController as UserSanPhamController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +24,11 @@ use App\Http\Controllers\OrderController;
 
 Auth::routes();
 // Route Client
-Route::get('/', function () {
-    return view('clients.home');
-});
 
-// Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+// Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/', [HomeController::class, 'getAllSanPham'])->name('home');
+Route::get('/danh-muc/{id}', [HomeController::class, 'loadSanPhamDM'])->name('danh_muc');
 Route::get('/product/detail/{id}', [HomeController::class, 'chiTietSanPham'])->name('products.detail');
 
 // Route giỏ hàng
@@ -85,13 +86,26 @@ Route::middleware(['auth', 'auth.admin'])->prefix('admins')
                 Route::delete('{id}/destroy', [SanPhamController::class, 'destroy'])->name('destroy');
             });
 
-            //Route Đơn hàng
+        //Route Đơn hàng
         Route::prefix('donhangs')
-        ->as('donhangs.')
-        ->group(function () {
-            Route::get('/', [DonHangController::class, 'index'])->name('index');
-            Route::get('/show/{id}', [DonHangController::class, 'show'])->name('show');
-            Route::put('{id}/update', [DonHangController::class, 'update'])->name('update');
-            Route::delete('{id}/destroy', [DonHangController::class, 'destroy'])->name('destroy');
-        });
+            ->as('donhangs.')
+            ->group(function () {
+                Route::get('/', [DonHangController::class, 'index'])->name('index');
+                Route::get('/show/{id}', [DonHangController::class, 'show'])->name('show');
+                Route::put('{id}/update', [DonHangController::class, 'update'])->name('update');
+                Route::delete('{id}/destroy', [DonHangController::class, 'destroy'])->name('destroy');
+            });
+
+        // Route Khuyến mãi
+        Route::prefix('khuyenmais')
+            ->as('khuyenmais.')
+            ->group(function () {
+                Route::get('/', [MaKhuyenMaiController::class, 'index'])->name('index');
+                Route::get('/create', [MaKhuyenMaiController::class, 'create'])->name('create');
+                Route::post('/store', [MaKhuyenMaiController::class, 'store'])->name('store');
+                Route::get('/show/{id}', [MaKhuyenMaiController::class, 'show'])->name('show');
+                Route::get('{id}/edit', [MaKhuyenMaiController::class, 'edit'])->name('edit');
+                Route::put('{id}/update', [MaKhuyenMaiController::class, 'update'])->name('update');
+                Route::delete('{id}/destroy', [MaKhuyenMaiController::class, 'destroy'])->name('destroy');
+            });
     });

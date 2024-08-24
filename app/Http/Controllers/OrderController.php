@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\OrderRequest;
-use App\Mail\OrderConfirm;
+use App\Models\DanhMuc;
 use App\Models\DonHang;
 use App\Models\SanPham;
+use App\Mail\OrderConfirm;
+use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\While_;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use PhpParser\Node\Stmt\While_;
 
 class OrderController extends Controller
 {
@@ -19,13 +20,14 @@ class OrderController extends Controller
      */
     public function index()
     {
+        $danhMuc = DanhMuc::query()->get();
         $donHangs = Auth::user()->donHang;
         $trangThaiDonHang = DonHang::TRANG_THAI_DON_HANG;
         $typeChoXacNhan = DonHang::CHO_XAC_NHAN;
         $typeDangVanChuyen = DonHang::DANG_VAN_CHUYEN;
         $typeDaXacNhan = DonHang::DA_XAC_NHAN;
         $typeDangChuanBi = DonHang::DANG_CHUAN_BI;
-        return view('clients.donhangs.index', compact('donHangs', 'trangThaiDonHang', 'typeChoXacNhan', 'typeDangVanChuyen', 'typeDaXacNhan', 'typeDangChuanBi'));
+        return view('clients.donhangs.index', compact('danhMuc', 'donHangs', 'trangThaiDonHang', 'typeChoXacNhan', 'typeDangVanChuyen', 'typeDaXacNhan', 'typeDangChuanBi'));
     }
 
     /**
@@ -33,6 +35,7 @@ class OrderController extends Controller
      */
     public function create()
     {
+        $danhMuc = DanhMuc::query()->get();
         $carts = session()->get('cart', []);
         if (!empty($carts)) {
             $total = 0;
@@ -44,7 +47,7 @@ class OrderController extends Controller
             }
 
             $total = $subTotal + $shipping;
-            return view('clients.donhangs.create', compact('carts', 'subTotal', 'total', 'shipping'));
+            return view('clients.donhangs.create', compact('danhMuc', 'carts', 'subTotal', 'total', 'shipping'));
         }
         return redirect()->route('cart.list');
     }
@@ -106,11 +109,12 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
+        $danhMuc = DanhMuc::query()->get();
         $donHang = DonHang::query()->findOrFail($id);
         $trangThaiDonHang = DonHang::TRANG_THAI_DON_HANG;
         $trangThaiThanhToan = DonHang::TRANG_THAI_THANH_TOAN;
 
-        return view('clients.donhangs.show', compact('donHang', 'trangThaiDonHang', 'trangThaiThanhToan'));
+        return view('clients.donhangs.show', compact('danhMuc', 'donHang', 'trangThaiDonHang', 'trangThaiThanhToan'));
     }
 
 
